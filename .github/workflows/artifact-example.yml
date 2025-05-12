@@ -1,0 +1,34 @@
+name: TXT Artifact Example
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Create sample .txt file
+        run: echo "Hello from GitHub Actions!" > example.txt
+
+      - name: Upload txt artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: txt-file
+          path: example.txt
+
+  process:
+    runs-on: ubuntu-latest
+    needs: generate
+    steps:
+      - name: Download txt artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: txt-file
+
+      - name: Display file contents
+        run: cat example.txt
